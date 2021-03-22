@@ -1,0 +1,120 @@
+---
+title: "Using database"
+author: ""
+date: "23/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Connect to the database
+
+- Now let's use the databases
+- First connect to the database
+
+```{r}
+library(DBI)
+library(tidyverse)
+
+db <- dbConnect(RSQLite::SQLite(), "~/covid.sqlite")
+```
+
+## Run queries
+
+### Get sample rows from each table 
+
+- Get sample rows from each table
+- Use `dbGetQuery()`
+  - Run SQL queries there
+
+```{r}
+
+```
+
+
+### Bit more complex queries
+
+1. Get the latest data for each county
+2. Get the data on 1 March, 2021, and select county with more than 10 deaths
+
+```{r}
+
+```
+#### Ordering and aggregation
+
+For the data above
+
+1. Order counties with the highest number of death
+2. Calculate the state level death figures
+
+
+```{r}
+
+```
+
+
+### Merging tables
+
+- merge covid and demo table by fips
+- (advanced) calculate per 1000 cases and deaths
+
+```{r}
+
+```
+
+## dblyr
+
+Now we will use `dbplyr`
+
+### Get the object for each table
+
+```{r}
+tb_covid <- tbl(db, "covid")
+tb_demo <- tbl(db, "demo")
+```
+
+
+### Let's check the same thing we did:
+
+
+#### Get sample rows from each table 
+
+- Get sample rows from each table
+- Use `dbGetQuery()`
+  - Run SQL queries there
+
+```{r}
+
+```
+
+
+#### Bit more complex queries
+
+1. Get the latest data for each county
+2. Get the data on 1 Aug, 2020, and select county with more than 10 deaths
+
+```{r}
+
+```
+#### Ordering and aggregation
+
+1. Order counties with the highest number of death
+2. Calculate the state level death figures
+
+
+```{r}
+
+```
+
+
+### Merging tables
+
+- merge covid and demo table by fips
+- calculate per 1000 cases and deaths
+
+
+```{r}
+
+```

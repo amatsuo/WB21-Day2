@@ -1,0 +1,183 @@
+---
+title: "Merging the datasets with tidyverse"
+author: ""
+date: "23/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Day 2
+
+We are going to use the covid 19 dataset along with the other two datasets (in "data/" folder). 
+
+- JHU dataset
+- Country level demographic data
+- Presidential voting in 2016
+ (or you can use, Presidential voting in 2020)
+
+All datasets are coming from Kaggle.
+
+- https://www.kaggle.com/headsortails/covid19-us-county-jhu-data-demographics
+- https://www.kaggle.com/stevepalley/2016uspresidentialvotebycounty
+- https://www.kaggle.com/muonneutrino/us-census-demographic-data
+- https://www.kaggle.com/unanimad/us-election-2020
+  - (for this one, I added fips to the original file and remove quite a bit of rows)
+
+
+The task is
+
+1. check the data completeness (e.g. make sure that all datasets have common list of counties)
+2. merge the datasets
+3. check whether there are any relations between covid and any demographic/political indexes
+
+## Packages
+
+```{r}
+library(tidyverse)
+```
+
+## Read three data files
+
+```{r}
+data_covid <- read_csv("../data/covid_us_county.csv.gz", guess_max = 1e5)
+data_demo <- read_csv("../data/acs2017_county_data.csv")
+data_pres <- read_csv("../data/pres16results.csv")
+```
+
+
+## Check the validity of the data
+
+### How the data look like
+
+
+```{r}
+```
+
+- renaming is necessary for `data_demo`
+- need to remove uncessary entries in fips of `data_pres`
+
+
+```{r}
+
+```
+
+
+
+### How many rows in each df?
+
+```{r}
+nrow(data_covid)
+nrow(data_demo)
+nrow(data_pres)
+```
+
+### Number of counties in each data frame
+
+- Which variable would you use to check?
+- How many unique counties in each data set?
+- Do they match? (if not does this seem problematic)?
+    
+```{r}
+
+```
+
+## Keep the necessary data
+
+### Get the latest numbers cases
+
+- From covid dataset, get the latest figures for each county
+
+```{r}
+
+```
+
+
+### Extract trump votes
+
+presidential votes
+  - Keep only trump vote rows
+
+```{r}
+
+```
+
+## Merge the datasets
+
+
+### Merging
+
+- Now lets merge the data set
+  1. latest covid data
+  2. country demographics
+  3. presidential votes
+- what `_join`?
+
+```{r}
+data_merged <- NULL
+
+```
+
+### Create variables for deaths/cases per 1000 population
+
+```{r}
+
+```
+
+## Using the merged datasets 
+
+- Get a correlation matrix or plot for the data
+- `cor()`
+- `pairs()`
+- `GGally::ggpairs()`, correlation plot (I showed in day 4 lecture)
+- let's check: deaths_per1000, cases_per1000, Hispanic, Black, IncomePerCap, Unemployment
+
+```{r}
+
+
+```
+
+## Create a database
+
+From the three datasets, let's create a database
+
+What we need to do is:
+
+1. Remove some duplicated fiels
+2. Create a database connection using `DBI` and `RSQlite`
+3. Create tables from these datasets (using `dbWriteTable()`)
+4. Disconnect from the db
+
+### check the database fields
+
+- Remove duplicate rows
+- Convert dates to character
+
+
+```{r}
+
+```
+
+
+### Create database connection
+
+```{r}
+library(DBI)
+file.remove("~/covid.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "~/covid.sqlite")
+
+```
+
+### Create/populate tables
+```{r}
+
+```
+
+### Disconnect
+
+```{r}
+
+```
